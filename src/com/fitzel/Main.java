@@ -1,10 +1,12 @@
+package com.fitzel;
+
 import java.io.IOException;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
 		FindPathInputReaderFile readerFile = new FindPathInputReaderFile();
-		//FindPathInputReaderStdIn readerStdIn = new FindPathInputReaderStdIn();
+		//com.fitzel.FindPathInputReaderStdIn readerStdIn = new com.fitzel.FindPathInputReaderStdIn();
 
 		readerFile.loadData();
 

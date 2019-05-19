@@ -1,3 +1,5 @@
+package com.fitzel;
+
 public class Node {
 
     private int posX, posY, distance;

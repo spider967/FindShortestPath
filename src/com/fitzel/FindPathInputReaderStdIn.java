@@ -1,3 +1,5 @@
+package com.fitzel;
+
 import java.io.IOException;
 import java.util.Scanner;
 
