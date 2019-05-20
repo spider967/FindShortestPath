@@ -2,6 +2,7 @@ package com.fitzel;
 
 import java.io.IOException;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Queue;
 
 public abstract class AbstractFindPathInputReader {
@@ -28,10 +29,6 @@ public abstract class AbstractFindPathInputReader {
 
     public abstract void readInput() throws IOException;
 
-    private static boolean isSafe(char maze[][], int visited[][], int posX, int posY){
-        return !(maze[posX][posY] == '#' || visited[posX][posY] != 0);
-    }
-
     private boolean isValid(char maze[][], boolean visited[][], int row, int column){
         return (row < mazeRows && column < mazeColumns && row >= 0 && column >= 0 && maze[row][column] != '#' && !visited[row][column]);
     }
@@ -52,39 +49,75 @@ public abstract class AbstractFindPathInputReader {
             }
             System.out.println();
         }
+
     }
 
     public int findShortestPath(int startPosX, int startPosY, int targetPosX, int targetPosY){
 
         Queue<Node> queue = new ArrayDeque<>();
+        ArrayList<Node> arrayOfNodes = new ArrayList<>();
 
         visited[startPosX][startPosY] = true;
-        queue.add(new Node(startPosX, startPosY, 0));
+        Node node = new Node(startPosX, startPosY, 0);
+        node.setPredecessorPosX(-1);
+        node.setPredecessorPosY(-1);
+        queue.add(node);
+        arrayOfNodes.add(node);
 
         int min_distance = Integer.MAX_VALUE;
 
         while (!queue.isEmpty()){
 
-            Node node = queue.poll();
+            node = queue.poll();
 
             startPosX = node.getPosX();
             startPosY = node.getPosY();
             int distance = node.getDistance();
 
             if (startPosX == targetPosX && startPosY == targetPosY){
+                for (int k = 0; k < distance; k++){
+                    for (int i = 0; i < arrayOfNodes.size(); i++){
+                        if (node.getPredecessorPosX() == arrayOfNodes.get(i).getPosX() && node.getPredecessorPosY() == arrayOfNodes.get(i).getPosY()) {
+                            path += translateMove(node.getPosX(), node.getPosY(), node.getPredecessorPosX(), node.getPredecessorPosY());
+                            node = arrayOfNodes.get(i);
+                        }
+                    }
+                }
+
                 min_distance = distance;
+                minPath = path;
                 break;
             }
 
             for (int k = 0; k < 4; k++){
                 if (isValid(maze, visited, startPosX + row[k], startPosY + col[k])){
                     visited[startPosX + row[k]][startPosY + col[k]] = true;
-                    queue.add(new Node(startPosX + row[k], startPosY + col[k], distance + 1));
+                    node = new Node(startPosX + row[k], startPosY + col[k], distance + 1);
+                    node.setPredecessorPosX(startPosX);
+                    node.setPredecessorPosY(startPosY);
+                    queue.add(node);
+                    arrayOfNodes.add(node);
                 }
             }
 
         }
         return min_distance;
+    }
+
+    private String translateMove(int posX, int posY, int precPosX, int precPosY){
+        if (posY == precPosY){
+            if (posX > precPosX)
+                return "d,";
+            else
+                return "u,";
+        }
+        if (posX == precPosX){
+            if (posY > precPosY)
+                return "r,";
+            else
+                return "l,";
+        }
+        return "";
     }
 
     protected void addSymbol(int x, int y, char symbol){

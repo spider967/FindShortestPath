@@ -3,6 +3,7 @@ package com.fitzel;
 public class Node {
 
     private int posX, posY, distance;
+    private int predecessorPosX, predecessorPosY;
 
     public Node(int posX, int posY, int distance) {
         this.posX = posX;
@@ -22,6 +23,14 @@ public class Node {
         return distance;
     }
 
+    public int getPredecessorPosX() {
+        return predecessorPosX;
+    }
+
+    public int getPredecessorPosY() {
+        return predecessorPosY;
+    }
+
     public void setPosX(int posX) {
         this.posX = posX;
     }
@@ -32,5 +41,13 @@ public class Node {
 
     public void setDistance(int distance) {
         this.distance = distance;
+    }
+
+    public void setPredecessorPosX(int predecessorPosX) {
+        this.predecessorPosX = predecessorPosX;
+    }
+
+    public void setPredecessorPosY(int predecessorPosY) {
+        this.predecessorPosY = predecessorPosY;
     }
 }
